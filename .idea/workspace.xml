@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a6e5ddeb-7f41-4460-a0f7-8f7ba3fcb4f8" name="Default" comment="">
+    <list default="true" id="a6e5ddeb-7f41-4460-a0f7-8f7ba3fcb4f8" name="Default" comment="Stream video with RTCPeerConnection">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/MyVideo.vue" afterPath="$PROJECT_DIR$/src/components/MyVideo.vue" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,10 +25,20 @@
       <file leaf-file-name="MyVideo.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/MyVideo.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="87" column="45" lean-forward="false" selection-start-line="87" selection-start-column="45" selection-end-line="87" selection-end-column="45" />
+            <state relative-caret-position="266">
+              <caret line="67" column="8" lean-forward="true" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
               <folding>
-                <element signature="e#1072#1155#0" expanded="false" />
+                <element signature="e#1198#1485#0" expanded="false" />
+                <element signature="e#1520#1603#0" expanded="false" />
+                <element signature="e#1630#3037#0" expanded="false" />
+                <element signature="e#3056#3197#0" expanded="false" />
+                <element signature="e#3225#4070#0" expanded="false" />
+                <element signature="e#4104#4396#0" expanded="false" />
+                <element signature="e#4431#4632#0" expanded="false" />
+                <element signature="e#4665#4904#0" expanded="false" />
+                <element signature="e#4941#5182#0" expanded="false" />
+                <element signature="e#5015#5174#0" expanded="false" />
+                <element signature="e#5718#6234#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -67,7 +79,7 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/router/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
+            <state relative-caret-position="247">
               <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
@@ -158,8 +170,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="607" />
-    <option name="y" value="5" />
+    <option name="x" value="686" />
+    <option name="y" value="11" />
     <option name="width" value="1220" />
     <option name="height" value="1075" />
   </component>
@@ -260,8 +272,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -362,33 +374,42 @@
       <workItem from="1501826207490" duration="32000" />
       <workItem from="1501834165310" duration="1416000" />
       <workItem from="1502701110914" duration="4581000" />
-      <workItem from="1502705718383" duration="3000" />
+      <workItem from="1502705718383" duration="821000" />
+      <workItem from="1502759040319" duration="5891000" />
     </task>
+    <task id="LOCAL-00001" summary="Stream video with RTCPeerConnection">
+      <created>1502705753220</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1502705753220</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25852000" />
+    <option name="totallyTimeSpent" value="32561000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="607" y="5" width="1220" height="1075" extended-state="0" />
+    <frame x="686" y="11" width="1220" height="1075" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15874363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32914287" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -396,6 +417,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Stream video with RTCPeerConnection" />
+    <option name="LAST_COMMIT_MESSAGE" value="Stream video with RTCPeerConnection" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -406,9 +431,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -466,7 +488,17 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1072#1155#0" expanded="false" />
+            <element signature="e#1198#1485#0" expanded="false" />
+            <element signature="e#1520#1603#0" expanded="false" />
+            <element signature="e#1630#3037#0" expanded="false" />
+            <element signature="e#3056#3197#0" expanded="false" />
+            <element signature="e#3225#4070#0" expanded="false" />
+            <element signature="e#4104#4396#0" expanded="false" />
+            <element signature="e#4431#4632#0" expanded="false" />
+            <element signature="e#4665#4904#0" expanded="false" />
+            <element signature="e#4941#5182#0" expanded="false" />
+            <element signature="e#5015#5174#0" expanded="false" />
+            <element signature="e#5718#6234#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -475,9 +507,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -542,7 +571,17 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1072#1155#0" expanded="false" />
+            <element signature="e#1198#1485#0" expanded="false" />
+            <element signature="e#1520#1603#0" expanded="false" />
+            <element signature="e#1630#3037#0" expanded="false" />
+            <element signature="e#3056#3197#0" expanded="false" />
+            <element signature="e#3225#4070#0" expanded="false" />
+            <element signature="e#4104#4396#0" expanded="false" />
+            <element signature="e#4431#4632#0" expanded="false" />
+            <element signature="e#4665#4904#0" expanded="false" />
+            <element signature="e#4941#5182#0" expanded="false" />
+            <element signature="e#5015#5174#0" expanded="false" />
+            <element signature="e#5718#6234#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -551,9 +590,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -710,15 +746,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/router/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
+        <state relative-caret-position="247">
           <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
@@ -796,10 +829,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/MyVideo.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="87" column="45" lean-forward="false" selection-start-line="87" selection-start-column="45" selection-end-line="87" selection-end-column="45" />
+        <state relative-caret-position="266">
+          <caret line="67" column="8" lean-forward="true" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
           <folding>
-            <element signature="e#1072#1155#0" expanded="false" />
+            <element signature="e#1198#1485#0" expanded="false" />
+            <element signature="e#1520#1603#0" expanded="false" />
+            <element signature="e#1630#3037#0" expanded="false" />
+            <element signature="e#3056#3197#0" expanded="false" />
+            <element signature="e#3225#4070#0" expanded="false" />
+            <element signature="e#4104#4396#0" expanded="false" />
+            <element signature="e#4431#4632#0" expanded="false" />
+            <element signature="e#4665#4904#0" expanded="false" />
+            <element signature="e#4941#5182#0" expanded="false" />
+            <element signature="e#5015#5174#0" expanded="false" />
+            <element signature="e#5718#6234#0" expanded="false" />
           </folding>
         </state>
       </provider>
