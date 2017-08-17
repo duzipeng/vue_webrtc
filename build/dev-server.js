@@ -24,9 +24,12 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-//创建socket.io的服务
-var io = require('socket.io').listen(app);
-io.socket.on('connection', function (socket) {
+//start socket.io
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+  console.log('启动了Socket.io');
   function log() {
     var array = [">>> Message from server: "];
     for (var i = 0; i < arguments.length; i++) {
@@ -60,7 +63,7 @@ io.socket.on('connection', function (socket) {
     socket.broadcast.emit('broadcast(): client ' + socket.id + ' joined room ' + room);
   })
 });
-//结束
+//end
 
 var compiler = webpack(webpackConfig)
 
@@ -117,10 +120,11 @@ devMiddleware.waitUntilValid(() => {
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
     opn(uri)
   }
-  _resolve()
+  // _resolve()
 })
 
-var server = app.listen(port)
+// var server = app.listen(port)
+server.listen(port);
 
 module.exports = {
   ready: readyPromise,
