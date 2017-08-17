@@ -28,7 +28,7 @@ var app = express()
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-io.on('connection', function (socket) {
+io.sockets.on('connection', function (socket) {
   console.log('启动了Socket.io');
   function log() {
     var array = [">>> Message from server: "];
@@ -47,11 +47,9 @@ io.on('connection', function (socket) {
   socket.on('create or join', function (room) {
     log('hello socket')
     // var numClients = io.sockets.clients(room).length;
-    var numClients = 0;
-    io.of('/').in(room).clients(function(error,clients){
-      numClients=clients.length;
-    });
+    var numClients = io.sockets.adapter.rooms[room]!=undefined ? (io.sockets.adapter.rooms[room]).length:0;
     log(numClients);
+
     log('Room ' + room + ' has ' + numClients + ' client(s)');
     log('Request to create or join room', room);
 
