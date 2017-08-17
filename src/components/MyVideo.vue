@@ -40,23 +40,23 @@
         this.socket.emit('create or join', room);
       }
 
-//      socket.on('full', function (room) {
-//        console.log('Room ' + room + ' is full');
-//      });
-//
-//      socket.on('empty', function (room) {
-//        isInitiator = true;
-//        console.log('Room ' + room + ' is empty');
-//      });
-//
-//      socket.on('join', function (room){
-//        console.log('Making request to join room ' + room);
-//        console.log('You are the initiator!');
-//      });
-//
-//      socket.on('log', function (array){
-//        console.log.apply(console, array);
-//      });
+      this.socket.on('full', function (room) {
+        console.log('Room ' + room + ' is full');
+      });
+
+      this.socket.on('empty', function (room) {
+        isInitiator = true;
+        console.log('Room ' + room + ' is empty');
+      });
+
+      this.socket.on('join', function (room){
+        console.log('Making request to join room ' + room);
+        console.log('You are the initiator!');
+      });
+
+      this.socket.on('log', function (array){
+        console.log.apply(console, array);
+      });
 //      this.isDisabled_stb = false;
 //      this.isDisabled_sdb = true;
 //      this.isDisabled_cb = true;

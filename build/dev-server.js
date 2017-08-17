@@ -45,14 +45,20 @@ io.on('connection', function (socket) {
   });
 
   socket.on('create or join', function (room) {
-    var numClients = io.sockets.clients(room).length;
+    log('hello socket')
+    // var numClients = io.sockets.clients(room).length;
+    var numClients = 0;
+    io.of('/').in(room).clients(function(error,clients){
+      numClients=clients.length;
+    });
+    log(numClients);
     log('Room ' + room + ' has ' + numClients + ' client(s)');
     log('Request to create or join room', room);
 
-    if (numClients == 0) {
+    if (numClients === 0) {
       socket.join(room);
       socket.emit('created', room);
-    } else if (numClients == 1) {
+    } else if (numClients === 1) {
       io.sockets.in(room).emit('join', room);
       socket.join(room);
       socket.emit('joined', room);
