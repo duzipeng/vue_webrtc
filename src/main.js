@@ -6,7 +6,7 @@ import router from './router'
 import './common/js/lib/adapter'
 
 Vue.config.productionTip = false
-Vue.prototype.socket = io.connect('http://127.0.0.1:8080');
+// Vue.prototype.socket = io.connect('http://127.0.0.1:8080');
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,179 +1,318 @@
 <template>
-  <div class="video-div">
-    <!--<textarea id="dataChannelSend" :disabled="isDisabled_dcs" placeholder="Press Start, enter some text, then press Send." ref="dataChannelSend"></textarea>-->
-    <!--<textarea id="dataChannelReceive" :disabled="isDisabled_dcr" ref="dataChannelReceive"></textarea>-->
-
-    <!--<div>-->
-      <!--<button id="startButton" :disabled="isDisabled_stb" ref="startButton">Start</button>-->
-      <!--<button id="sendButton" :disabled="isDisabled_sdb" ref="sendButton">Send</button>-->
-      <!--<button id="closeButton" :disabled="isDisabled_cb" ref="closeButton">Stop</button>-->
-    <!--</div>-->
+  <div class="container">
+    <div id='videos'>
+      <video id='localVideo' ref="localVideo" autoplay muted></video>
+      <video id='remoteVideo' ref="localVideo" autoplay></video>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 //  import JsSIP from 'jssip'
+import Vue from 'vue'
 
   export default {
     data() {
       return {
-//        isDisabled_dcs: {type: Boolean, default: true},
-//        isDisabled_dcr: {type: Boolean, default: true},
-//        isDisabled_stb: {type: Boolean, default: false},
-//        isDisabled_sdb: {type: Boolean, default: false},
-//        isDisabled_cb: {type: Boolean, default: false},
-//        sendChannel: {type: Object},
-//        receiveChannel: {type: Object},
-//        localPeerConnection: {type: Object},
-//        remotePeerConnection: {type: Object}
+        room: 'foo',
+        isInitiator: {type: Boolean, default: false},
+        isStarted: {type: Boolean, default: false},
+        isChannelReady: {type: Boolean, default: false},
+        turnReady: {type: Boolean, default: false},
+        localStream: {type: Object},
+        remoteStream: {type: Object},
+        pc: {type: Object},
+        pc_config: {
+          'iceServers': [{
+            'url': 'stun:stun.l.google.com:19302'
+          }]
+        },
+        sdpConstraints: {
+          'mandatory': {
+            'OfferToReceiveAudio': true,
+            'OfferToReceiveVideo': true
+          }
+        },
+        constraints: {
+          video: true
+        }
       }
     },
     mounted() {
-      var isInitiator;
+      //////////////////////////////////////////////////////////
 
-      let room = prompt('Enter room name:');
-//
-//      var socket = io.connect();
-
-      if (room !== "") {
-        console.log('Joining room' + room);
-        this.socket.emit('create or join', room);
+      Vue.prototype.socket = io.connect('http://127.0.0.1:8080');
+      var _this = this;
+      if (this.room !== '') {
+        console.log('Create or join room', this.room);
+        this.socket.emit('create or join', this.room);
       }
 
-      this.socket.on('full', function (room) {
+      this.socket.on('created', function (room){
+        console.log('Created room ' + room);
+        this.isInitiator = true;
+      });
+
+      this.socket.on('full', function (room){
         console.log('Room ' + room + ' is full');
       });
 
-      this.socket.on('empty', function (room) {
-        isInitiator = true;
-        console.log('Room ' + room + ' is empty');
+      this.socket.on('join', function (room){
+        console.log('Another peer made a request to join room ' + room);
+        console.log('This peer is the initiator of room ' + room + '!');
+        this.isChannelReady = true;
       });
 
-      this.socket.on('join', function (room){
-        console.log('Making request to join room ' + room);
-        console.log('You are the initiator!');
+      this.socket.on('joined', function (room){
+        console.log('This peer has joined room ' + room);
+        this.isChannelReady = true;
       });
 
       this.socket.on('log', function (array){
         console.log.apply(console, array);
       });
-//      this.isDisabled_stb = false;
-//      this.isDisabled_sdb = true;
-//      this.isDisabled_cb = true;
-//      this.$refs.startButton.onclick = this.createConnection;
-//      this.$refs.sendButton.onclick = this.sendData;
-//      this.$refs.closeButton.onclick = this.closeDataChannels;
-//    },
-//    methods: {
-//      trace(text) {
-//        console.log((performance.now() / 1000).toFixed(3) + ": " + text);
-//      },
-//      createConnection() {
-//        let servers = null;
-//        this.localPeerConnection = new RTCPeerConnection(servers, {optional: [{RtcDataChannel: true}]});
-//        this.trace('Created local peer connection object localPeerConnection');
-//
-//        try {
-//          //Reliable Data Channels not yet supported in Chrome
-//          this.sendChannel = this.localPeerConnection.createDataChannel("sendDataChannel", {reliable: false});
-//          this.trace('Create send data channel');
-//        } catch(e) {
-//          alert('Failed to create data channel. ' + 'You need Chrome M25 or later with RtcDataChannel enabled');
-//          this.trace('createdDataChannel() failed with exception: ' + e.message);
-//        }
-//        this.localPeerConnection.onicecandidate = this.gotLocalCandidate;
-//        this.sendChannel.onopen = this.handleSendChannelStateChange;
-//        this.sendChannel.onclose = this.handleSendChannelStateChange;
-//
-//        this.remotePeerConnection = new RTCPeerConnection(servers, {optional:  [{RtcDataChannels: true}]});
-//        this.trace('Created remote peer connection object remotePeerConnection');
-//        this.remotePeerConnection.onicecandidate = this.gotRemoteIceCandidate;
-//        this.remotePeerConnection.ondatachannel = this.gotReceiveChannel;
-//
-//        this.localPeerConnection.createOffer(this.gotLocalDescription, this.handleError);
-//        this.isDisabled_stb = true;
-//        this.isDisabled_cb = false;
-//      },
-//      sendData() {
-//        let data = this.$refs.dataChannelSend.value;
-//        this.sendChannel.send(data);
-//        this.trace('Sent data: ' + data);
-//      },
-//      closeDataChannels() {
-//        this.trace('Closing data channels');
-//        this.sendChannel.close();
-//        this.trace('Closed data channel with label: ' + this.sendChannel.label);
-//        this.receiveChannel.close();
-//        this.trace('Closed data channel with label: ' + this.receiveChannel.label);
-//        this.localPeerConnection.close();
-//        this.remotePeerConnection.close();
-//        this.localPeerConnection = null;
-//        this.remotePeerConnection = null;
-//        this.trace('Closed peer connections');
-//        this.isDisabled_stb = false;
-//        this.isDisabled_sdb = true;
-//        this.isDisabled_cb = true;
-//        this.$refs.dataChannelSend.value = "";
-//        this.$refs.dataChannelReceive.value = "";
-//        this.isDisabled_dcs = true;
-//        this.$refs.dataChannelSend.placeholder = "Press Start, enter some text, then press Send.";
-//      },
-//      gotLocalDescription(desc) {
-//        this.localPeerConnection.setLocalDescription(desc);
-//        this.trace('Offer from localPeerConnection \n' + desc.sdp);
-//        this.remotePeerConnection.setRemoteDescription(desc);
-//        this.remotePeerConnection.createAnswer(this.gotRemoteDescription, this.handleError);
-//      },
-//      gotRemoteDescription(desc) {
-//        this.remotePeerConnection.setLocalDescription(desc);
-//        this.trace('Answer from remotePeerConnection \n' + desc.sdp);
-//        this.localPeerConnection.setRemoteDescription(desc);
-//      },
-//      gotLocalCandidate(event) {
-//        this.trace('local ice callback');
-//        if (event.candidate) {
-//          this.remotePeerConnection.addIceCandidate(event.candidate);
-//          this.trace('Local ICE candidate: \n' + event.candidate.candidate);
-//        }
-//      },
-//      gotRemoteIceCandidate(event) {
-//        this.trace('remote ice callback');
-//        if (event.candidate) {
-//          this.localPeerConnection.addIceCandidate(event.candidate);
-//          this.trace('Remote ICE candidate: \n ' + event.candidate.candidate);
-//        }
-//      },
-//      gotReceiveChannel(event) {
-//        this.trace('Receive Channel Callback');
-//        this.receiveChannel = event.channel;
-//        this.receiveChannel.onmessage = this.handleMessage;
-//        this.receiveChannel.onopen = this.handleReceiveChannelStateChange;
-//        this.receiveChannel.onclose = this.handleReceiveChannelStateChange;
-//      },
-//      handleMessage(event) {
-//        this.trace('Received message: ' + event.data);
-//        this.$refs.dataChannelReceive.value = event.data;
-//      },
-//      handleSendChannelStateChange() {
-//        let readyState = this.sendChannel.readyState;
-//        this.trace('Send channel state is: ' + readyState);
-//        if (readyState == "open") {
-//          this.isDisabled_dcs = false;
-//          this.$refs.dataChannelSend.focus();
-//          this.$refs.dataChannelSend.placeholder = "";
-//          this.isDisabled_sdb = false;
-//          this.isDisabled_cb = false;
-//        } else {
-//          this.isDisabled_dcs = true;
-//          this.isDisabled_sdb = true;
-//          this.isDisabled_cb = true;
-//        }
-//      },
-//      handleReceiveChannelStateChange() {
-//        var readyState = this.receiveChannel.readyState;
-//        this.trace('Receive channel state is: ' + readyState);
-//      },
-//      handleError(){}
+
+      /////////////////////////////////////////////////////////////////
+
+      this.socket.on('message', function (message){
+        console.log('Client received message:', message);
+        if (message === 'got user media') {
+          _this.maybeStart()
+        } else if (message.type === 'offer') {
+          if (!_this.isInitiator && !_this.isStarted) {
+            _this.maybeStart();
+          }
+          _this.pc.setRemoteDescription(new RTCSessionDescription(message));
+          _this.doAnswer();
+
+        } else if (message.type === 'answer' && _this.isStarted) {
+          _this.pc.setRemoteDescription(new RTCSessionDescription(message));
+        } else if (message.type === 'candidate' && _this.isStarted) {
+          let candidate = new RTCIceCandidate({
+            sdpMLineIndex: message.label,
+            candidate: message.candidate
+          });
+          _this.pc.addIceCandidate(candidate);
+        } else if (message === 'bye' && _this.isStarted) {
+          _this.handleRemoteHangup();
+        }
+      });
+
+      ////////////////////////////////////////////////////////////////////////
+
+      navigator.getUserMedia(this.constraints, this.handleUserMedia, this.handleUserMediaError)
+
+      console.log('Getting user media with constraints', this.constraints);
+
+      if (location.hostname != "localhost") {
+        this.requestTurn('https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913');
+      }
+
+      window.onbeforeunload = function (e) {
+        this.sendMessage('bye');
+      }
+
+    },
+    methods: {
+      sendMessage(message) {
+        console.log('Client sending message: ', message);
+        this.socket.emit('message', message);
+      },
+      maybeStart() {
+        if (!this.isStarted && this.localStream.active === true && this.isChannelReady) {
+          this.createPeerConnection();
+          this.pc.addStream(this.localStream);
+          this.isStarted = true;
+          console.log('isInitiator', this.isInitiator);
+          if (this.isInitiator) {
+            this.doCall();
+          }
+        }
+      },
+      handleUserMedia(stream) {
+        console.log('Adding local stream.');
+        this.$refs.localVideo.src = window.URL.createObjectURL(stream);
+        this.localStream = stream;
+        this.sendMessage('got user media');
+        if (this.isInitiator) {
+          this.maybeStart();
+        }
+      },
+      handleUserMediaError(error){
+        console.log('getUserMedia error: ', error);
+      },
+      createPeerConnection() {
+        try {
+          this.pc = new RTCPeerConnection(null);
+          this.pc.onicecandidate = this.handleIceCandidate;
+          this.pc.onaddstream = this.handleRemoteStreamAdded;
+          this.pc.onremovestream = this.handleRemoteStreamRemoved;
+          console.log('Created RTCPeerConnnection');
+        } catch (e) {
+          console.log('Failed to create PeerConnection, exception: ' + e.message);
+          alert('Cannot create RTCPeerConnection object.');
+          return;
+        }
+      },
+      handleIceCandidate(event) {
+        console.log('handleIceCandidate event: ', event);
+        if (event.candidate) {
+          this.sendMessage({
+            type: 'candidate',
+            label: event.candidate.sdpMLineIndex,
+            id: event.candidate.sdpMid,
+            candidate: event.candidate.candidate});
+        } else {
+          console.log('End of candidates.');
+        }
+      },
+      handleRemoteStreamAdded(event) {
+        console.log('Remote stream added.');
+        this.$refs.remoteVideo.src = window.URL.createObjectURL(event.stream);
+        this.remoteStream = event.stream;
+      },
+      handleCreateOfferError(event){
+        console.log('createOffer() error: ', event);
+      },
+      doCall() {
+        console.log('Sending offer to peer');
+        this.pc.createOffer(this.setLocalAndSendMessage, this.handleCreateOfferError);
+      },
+      doAnswer() {
+        console.log('Sending answer to peer.');
+        this.pc.createAnswer(this.setLocalAndSendMessage, null, this.sdpConstraints);
+      },
+      setLocalAndSendMessage(sessionDescription) {
+        // Set Opus as the preferred codec in SDP if Opus is present.
+        sessionDescription.sdp = this.preferOpus(sessionDescription.sdp);
+        this.pc.setLocalDescription(sessionDescription);
+        console.log('setLocalAndSendMessage sending message' , sessionDescription);
+        this.sendMessage(sessionDescription);
+      },
+      requestTurn(turn_url) {
+        let turnExists = false;
+        for (let i in this.pc_config.iceServers) {
+          if (this.pc_config.iceServers[i].url.substr(0, 5) === 'turn:') {
+            turnExists = true;
+            this.turnReady = true;
+            break;
+          }
+        }
+        if (!turnExists) {
+          console.log('Getting TURN server from ', turn_url);
+          // No TURN server. Get one from computeengineondemand.appspot.com:
+          let xhr = new XMLHttpRequest();
+          xhr.onreadystatechange = function(){
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              let turnServer = JSON.parse(xhr.responseText);
+              console.log('Got TURN server: ', turnServer);
+              this.pc_config.iceServers.push({
+                'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
+                'credential': turnServer.password
+              });
+              this.turnReady = true;
+            }
+          };
+          xhr.open('GET', turn_url, true);
+          xhr.send();
+        }
+      },
+      handleRemoteStreamAdded(event) {
+        console.log('Remote stream added.');
+        this.$refs.remoteVideo.src = window.URL.createObjectURL(event.stream);
+        this.remoteStream = event.stream;
+      },
+      handleRemoteStreamRemoved(event) {
+        console.log('Remote stream removed. Event: ', event);
+      },
+      hangup() {
+        console.log('Hanging up.');
+        this.stop();
+        this.sendMessage('bye');
+      },
+      handleRemoteHangup() {
+//  console.log('Session terminated.');
+        // stop();
+        // isInitiator = false;
+      },
+      stop() {
+        this.isStarted = false;
+        // isAudioMuted = false;
+        // isVideoMuted = false;
+        this.pc.close();
+        this.pc = null;
+      },
+      preferOpus(sdp) {
+        // Set Opus as the default audio codec if it's present.
+        let sdpLines = sdp.split('\r\n');
+        let mLineIndex;
+        // Search for m line.
+        for (let i = 0; i < sdpLines.length; i++) {
+          if (sdpLines[i].search('m=audio') !== -1) {
+            mLineIndex = i;
+            break;
+          }
+        }
+        if (mLineIndex === null) {
+          return sdp;
+        }
+
+        // If Opus is available, set it as the default in m line.
+        for (let i = 0; i < sdpLines.length; i++) {
+          if (sdpLines[i].search('opus/48000') !== -1) {
+            let opusPayload = this.extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
+            if (opusPayload) {
+              sdpLines[mLineIndex] = this.setDefaultCodec(sdpLines[mLineIndex], opusPayload);
+            }
+            break;
+          }
+        }
+
+        // Remove CN in m line and sdp.
+        sdpLines = this.removeCN(sdpLines, mLineIndex);
+
+        sdp = sdpLines.join('\r\n');
+        return sdp;
+      },
+      extractSdp(sdpLine, pattern) {
+        let result = sdpLine.match(pattern);
+        return result && result.length === 2 ? result[1] : null;
+      },
+      setDefaultCodec(mLine, payload) {
+        // Set the selected codec to the first in m line.
+        let elements = mLine.split(' ');
+        let newLine = [];
+        let index = 0;
+        for (let i = 0; i < elements.length; i++) {
+          if (index === 3) { // Format of media starts from the fourth.
+            newLine[index++] = payload; // Put target payload to the first.
+          }
+          if (elements[i] !== payload) {
+            newLine[index++] = elements[i];
+          }
+        }
+        return newLine.join(' ');
+      },
+      removeCN(sdpLines, mLineIndex) {
+        // Strip CN from sdp before CN constraints is ready.
+        let mLineElements = sdpLines[mLineIndex].split(' ');
+        // Scan from end for the convenience of removing an item.
+        for (let i = sdpLines.length-1; i >= 0; i--) {
+          let payload = this.extractSdp(sdpLines[i], /a=rtpmap:(\d+) CN\/\d+/i);
+          if (payload) {
+            let cnPos = mLineElements.indexOf(payload);
+            if (cnPos !== -1) {
+              // Remove CN payload from m line.
+              mLineElements.splice(cnPos, 1);
+            }
+            // Remove CN line in sdp
+            sdpLines.splice(i, 1);
+          }
+        }
+
+        sdpLines[mLineIndex] = mLineElements.join(' ');
+        return sdpLines;
+      }
     }
   }
 </script>
