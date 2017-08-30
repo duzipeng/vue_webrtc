@@ -15,10 +15,10 @@ import Vue from 'vue'
     data() {
       return {
         room: 'foo',
-        isInitiator: {type: Boolean, default: false},
-        isStarted: {type: Boolean, default: false},
-        isChannelReady: {type: Boolean, default: false},
-        turnReady: {type: Boolean, default: false},
+        isInitiator: false,
+        isStarted: false,
+        isChannelReady: false,
+        turnReady: false,
         localStream: {type: Object},
         remoteStream: {type: Object},
         pc: {type: Object},
@@ -41,8 +41,8 @@ import Vue from 'vue'
     mounted() {
       //////////////////////////////////////////////////////////
 
-      Vue.prototype.socket = io.connect('http://127.0.0.1:8080');
-      var _this = this;
+      Vue.prototype.socket = io.connect('http://127.0.0.1:8080');  //建立信道
+      let _this = this;
       if (this.room !== '') {
         console.log('Create or join room', this.room);
         this.socket.emit('create or join', this.room);
@@ -51,7 +51,8 @@ import Vue from 'vue'
       this.socket.on('created', function (room){
         console.log('Created room ' + room);
         this.isInitiator = true;
-      });
+        console.log("isInitiator(socket): ", this.isInitiator)
+      }.bind(this));
 
       this.socket.on('full', function (room){
         console.log('Room ' + room + ' is full');
@@ -60,12 +61,12 @@ import Vue from 'vue'
       this.socket.on('join', function (room){
         console.log('Another peer made a request to join room ' + room);
         console.log('This peer is the initiator of room ' + room + '!');
-        this.isChannelReady = true;
+        _this.isChannelReady = true;
       });
 
       this.socket.on('joined', function (room){
         console.log('This peer has joined room ' + room);
-        this.isChannelReady = true;
+        _this.isChannelReady = true;
       });
 
       this.socket.on('log', function (array){
@@ -77,26 +78,26 @@ import Vue from 'vue'
       this.socket.on('message', function (message){
         console.log('Client received message:', message);
         if (message === 'got user media') {
-          _this.maybeStart()
+          this.maybeStart()
         } else if (message.type === 'offer') {
-          if (!_this.isInitiator && !_this.isStarted) {
-            _this.maybeStart();
+          if (!this.isInitiator && !_this.isStarted) {
+            this.maybeStart();
           }
-          _this.pc.setRemoteDescription(new RTCSessionDescription(message));
-          _this.doAnswer();
+          this.pc.setRemoteDescription(new RTCSessionDescription(message));
+          this.doAnswer();
 
-        } else if (message.type === 'answer' && _this.isStarted) {
-          _this.pc.setRemoteDescription(new RTCSessionDescription(message));
-        } else if (message.type === 'candidate' && _this.isStarted) {
+        } else if (message.type === 'answer' && this.isStarted) {
+          this.pc.setRemoteDescription(new RTCSessionDescription(message));
+        } else if (message.type === 'candidate' && this.isStarted) {
           let candidate = new RTCIceCandidate({
             sdpMLineIndex: message.label,
             candidate: message.candidate
           });
-          _this.pc.addIceCandidate(candidate);
-        } else if (message === 'bye' && _this.isStarted) {
-          _this.handleRemoteHangup();
+          this.pc.addIceCandidate(candidate);
+        } else if (message === 'bye' && this.isStarted) {
+          this.handleRemoteHangup();
         }
-      });
+      }.bind(this));
 
       ////////////////////////////////////////////////////////////////////////
 
@@ -120,12 +121,12 @@ import Vue from 'vue'
       },
       maybeStart() {
         if (!this.isStarted && this.localStream.active === true && this.isChannelReady) {
-          this.createPeerConnection();
-          this.pc.addStream(this.localStream);
+          this.createPeerConnection();     //创建对等连接并设置回调
+          this.pc.addStream(this.localStream);    //将流添加到对等连接
           this.isStarted = true;
           console.log('isInitiator', this.isInitiator);
           if (this.isInitiator) {
-            this.doCall();
+            this.doCall();    //通过创建并发送SDP提议发起呼叫
           }
         }
       },
@@ -134,6 +135,7 @@ import Vue from 'vue'
         this.$refs.localVideo.src = window.URL.createObjectURL(stream);
         this.localStream = stream;
         this.sendMessage('got user media');
+        console.log("isInitiator(handleUserMedia): ", this.isInitiator);
         if (this.isInitiator) {
           this.maybeStart();
         }
@@ -141,11 +143,11 @@ import Vue from 'vue'
       handleUserMediaError(error){
         console.log('getUserMedia error: ', error);
       },
-      createPeerConnection() {
+      createPeerConnection() {    //创建对等连接并设置回调
         try {
           this.pc = new RTCPeerConnection(null);
-          this.pc.onicecandidate = this.handleIceCandidate;
-          this.pc.onaddstream = this.handleRemoteStreamAdded;
+          this.pc.onicecandidate = this.handleIceCandidate;  //向对等端发送各个ICE候选项
+          this.pc.onaddstream = this.handleRemoteStreamAdded;   //处理添加的远端流
           this.pc.onremovestream = this.handleRemoteStreamRemoved;
           console.log('Created RTCPeerConnnection');
         } catch (e) {
@@ -165,11 +167,6 @@ import Vue from 'vue'
         } else {
           console.log('End of candidates.');
         }
-      },
-      handleRemoteStreamAdded(event) {
-        console.log('Remote stream added.');
-        this.$refs.remoteVideo.src = window.URL.createObjectURL(event.stream);
-        this.remoteStream = event.stream;
       },
       handleCreateOfferError(event){
         console.log('createOffer() error: ', event);
@@ -295,6 +292,7 @@ import Vue from 'vue'
       },
       removeCN(sdpLines, mLineIndex) {
         // Strip CN from sdp before CN constraints is ready.
+        console.log(sdpLines[mLineIndex]);
         let mLineElements = sdpLines[mLineIndex].split(' ');
         // Scan from end for the convenience of removing an item.
         for (let i = sdpLines.length-1; i >= 0; i--) {
